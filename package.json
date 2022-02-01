@@ -1,0 +1,31 @@
+{
+  "name": "blogs_list",
+  "version": "1.0.0",
+  "description": "Blog list App!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "notes",
+    "server",
+    "fullstackopen"
+  ],
+  "author": "manglynho",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "logger": "^0.0.1",
+    "mongoose": "^6.1.8"
+  },
+  "devDependencies": {
+    "eslint": "^8.8.0",
+    "nodemon": "^2.0.15"
+  }
+}
