@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose"
   },
   "keywords": [
     "notes",
@@ -21,11 +21,16 @@
     "cors": "^2.8.5",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
+    "lodash": "^4.17.21",
     "logger": "^0.0.1",
     "mongoose": "^6.1.8"
   },
   "devDependencies": {
     "eslint": "^8.8.0",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.15"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
