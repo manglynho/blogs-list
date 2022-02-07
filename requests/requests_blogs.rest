@@ -9,3 +9,13 @@ content-type: application/json
     "url": "https://blog.lorenzo.com",
     "likes": 900000
 }
+###
+PUT http://localhost:3001/api/blogs/620174a244eca6030f97c520 HTTP/1.1
+content-type: application/json
+
+{
+    "title": "My Awesome Blog",
+    "author": "Lorenzo",
+    "url": "https://blog.lorenzo.com",
+    "likes": 9
+}
