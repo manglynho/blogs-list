@@ -2,20 +2,25 @@ GET http://localhost:3001/api/blogs/
 ###
 POST http://localhost:3001/api/blogs/ HTTP/1.1
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdseW5obyIsImlkIjoiNjIwM2ZjMGE2ZDk1ZGE1Nzc2ZmExZDMyIiwiaWF0IjoxNjQ0NDM3MDYyfQ.abrwadNsvfaDyHiu7qqZLCFe-XHfrEdJ62p0JjgkNd8
 
 {
-    "title": "My Awesome Blog",
+    "title": "My second Awesome Blog",
     "author": "Lorenzo",
     "url": "https://blog.lorenzo.com",
     "likes": 900000
 }
 ###
-PUT http://localhost:3001/api/blogs/620174a244eca6030f97c520 HTTP/1.1
+DELETE  http://localhost:3001/api/blogs/62041fbabf647bd9a53563bd HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdseW5obyIsImlkIjoiNjIwM2ZjMGE2ZDk1ZGE1Nzc2ZmExZDMyIiwiaWF0IjoxNjQ0NDM3MDYyfQ.abrwadNsvfaDyHiu7qqZLCFe-XHfrEdJ62p0JjgkNd8
+###
+PUT http://localhost:3001/api/blogs/62041a835830be37a16e5db0 HTTP/1.1
 content-type: application/json
 
 {
     "title": "My Awesome Blog",
     "author": "Lorenzo",
     "url": "https://blog.lorenzo.com",
-    "likes": 9
+    "likes": 12
 }

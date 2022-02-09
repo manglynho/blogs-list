@@ -2,9 +2,11 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -12,8 +14,15 @@ beforeEach(async () => {
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
+
 })
 
+beforeEach(async () => {
+  await User.deleteMany({})
+  const passwordHash = await bcrypt.hash('sekret', 10)
+  const user = new User({ username: 'root', passwordHash })
+  await user.save()
+})
 
 describe('Checking the Blogs lists', () => {
   test('ok blogs are returned as json', async () => {
@@ -64,7 +73,9 @@ describe('viewing a specific blog entry', () => {
 })
 
 describe('addition tests', () => {
+
   test('new blog can be added', async () => {
+    const token = await helper.getToken()
     const newBlog = {
       title: 'New Blog',
       author: 'New author',
@@ -73,6 +84,7 @@ describe('addition tests', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -85,6 +97,7 @@ describe('addition tests', () => {
   })
 
   test('new blog no likes property', async () => {
+    const token = await helper.getToken()
     const newBlog = {
       title: 'New Blog',
       author: 'New author',
@@ -92,6 +105,7 @@ describe('addition tests', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -101,13 +115,29 @@ describe('addition tests', () => {
     expect(contents).toContain(0)
   })
 
+  test('new blog fails on no token', async () => {
+    const newBlog = {
+      title: 'New Blog',
+      author: 'New author',
+      url: 'new url',
+    }
+    const result = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+
+    expect(result.body.error).toContain('token missing or invalid')
+  })
+
   test('this should throw a 400 code', async () => {
+    const token = await helper.getToken()
     const newBlog = {
       url: 'new url',
       likes: 9
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(400)
       //mongose schema throw 400 error on required fields...
@@ -119,9 +149,20 @@ describe('deletion tests', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
+    const usersAtStart = await helper.usersInDb()
+    const userToToken = usersAtStart[0]
+    //set user id on blog
+    const user = await User.findById(userToToken.id)
+    const blog = {
+      user: user._id
+    }
+
+    await Blog.findByIdAndUpdate(blogToDelete.id, blog, { new: true })
+    const token = await helper.getToken()
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -133,6 +174,16 @@ describe('deletion tests', () => {
     expect(contents).not.toContain(blogToDelete.id)
   })
 
+  test('unautorized if no token is sent', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    const result = await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(401)
+
+    expect(result.body.error).toContain('token missing or invalid')
+  })
+
 })
 
 describe('updating tests', () => {
@@ -140,6 +191,8 @@ describe('updating tests', () => {
   test('valid likes element update', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
+
+
 
     const updateLikes = {
       likes: 9
