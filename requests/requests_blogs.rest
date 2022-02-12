@@ -2,13 +2,13 @@ GET http://localhost:3001/api/blogs/
 ###
 POST http://localhost:3001/api/blogs/ HTTP/1.1
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdseW5obyIsImlkIjoiNjIwM2ZjMGE2ZDk1ZGE1Nzc2ZmExZDMyIiwiaWF0IjoxNjQ0NDM3MDYyfQ.abrwadNsvfaDyHiu7qqZLCFe-XHfrEdJ62p0JjgkNd8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvcmVuem8iLCJpZCI6IjYyMDQyMmQxOTQyOGY3NTEzZjU4NTBlYyIsImlhdCI6MTY0NDYzMzc2NH0.baBDe8N_YrCOTE4sT0EDjiK9vlicWdMXvu66iK0DMQs
 
 {
-    "title": "My second Awesome Blog",
+    "title": "My Second Awesome Blog",
     "author": "Lorenzo",
     "url": "https://blog.lorenzo.com",
-    "likes": 900000
+    "likes": 100
 }
 ###
 DELETE  http://localhost:3001/api/blogs/62041fbabf647bd9a53563bd HTTP/1.1
